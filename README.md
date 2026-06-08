@@ -43,20 +43,20 @@ automation-tests/
 ## 🔬 Technical Showcase
 
 This framework demonstrates specialized engineering solutions for non-deterministic Gen-AI environments:
-* **AI-Powered Relevance Scoring:** Utilizes an "LLM-as-a-judge" pattern, employing a secondary AI model (e.g., Vertex AI/Gemini) to programmatically evaluate the quality and relevance of generated responses against defined thresholds.
-* **Stateful Session Management:** Validates complex application states, ensuring deep-linked URLs accurately restore previous AI generation threads, conversation history, and multi-step feedback loops.
-* **Robust Asynchronous Synchronization:** Implements a custom `waitForGenAi` utility to manage non-deterministic Gen-AI model latency, leveraging ARIA progress roles and network-idle states for reliable test synchronization.
-* **Cross-Context & Multi-Tab Orchestration:** Orchestrates complex user journeys across multiple browser contexts and tabs, verifying data persistence and asset forwarding between internal tools.
-* **Browser-Native API Integration Testing:** Validates system-level interactions, including `navigator.clipboard` for shareable links and automated file-system checks for dynamic downloads.
-* **Responsive & Accessibility Compliance:** Ensures comprehensive coverage for responsive design across various breakpoints (Desktop, Tablet, Mobile) and validates ARIA attributes for accessibility.
-* **Dynamic Test Data Generation:** Leverages `Faker.js` for high-entropy input generation and dynamic binary file creation to robustly test image upload pipelines and error handling.
+* **AI-Powered Relevance Scoring:** Utilizes an "LLM-as-a-judge" pattern, employing a secondary AI model (e.g., Vertex AI/Gemini) to programmatically evaluate the quality and relevance of generated responses against defined thresholds. (e.g., `GEN-T80`)
+* **Stateful Session Management:** Validates complex application states, ensuring deep-linked URLs accurately restore previous AI generation threads, conversation history, and multi-step feedback loops. (e.g., `GEN-T127`, `GEN-T130`)
+* **Robust Asynchronous Synchronization:** Implements a custom `waitForGenAi` utility to manage non-deterministic Gen-AI model latency, leveraging ARIA progress roles and network-idle states for reliable test synchronization. (e.g., `GEN-T367`)
+* **Cross-Context & Multi-Tab Orchestration:** Orchestrates complex user journeys across multiple browser contexts and tabs, verifying data persistence and asset forwarding between internal tools. (e.g., `GEN-T138`, `GEN-T412`)
+* **Browser-Native API Integration Testing:** Validates system-level interactions, including `navigator.clipboard` for shareable links and automated file-system checks for dynamic downloads. (e.g., `GEN-T386`, `GEN-T100`)
+* **Responsive & Accessibility Compliance:** Validates system behavior across defined viewports and ensures accessibility standards by verifying ARIA attributes and roles. (e.g., `GEN-T151`, `GEN-T192`)
+* **Dynamic Test Data Generation:** Leverages `Faker.js` for high-entropy input generation and dynamic binary file creation to robustly test image upload pipelines and error handling. (e.g., `GEN-T82`, `GEN-T283`)
 * **Scalable Architecture (POM & Playwright Fixtures):** Built on a scalable Page Object Model (POM) with a custom Playwright fixture system, ensuring high code reusability and clear separation of concerns.
 
 ## 📐 Page Object Model (POM) Architecture
 
 This project leverages the **Page Object Model (POM)** design pattern to create a robust and maintainable automation suite. By abstracting the application's UI into distinct classes, we ensure that test scripts remain resilient to UI changes.
 
-### Core Principles:
+### Core Principles: (e.g., `GEN-T189`, `GEN-T124`)
 * **Encapsulation:** All element locators and page-specific actions are contained within Page Object classes.
 * **Component-Based Design:** Shared UI elements like the `SideNavigationComponent` and `OnboardingModalComponent` are built as reusable components that can be integrated into multiple Page Objects.
 * **Fixture Integration:** We utilize Playwright's dependency injection (fixtures) to manage Page Object lifetimes. This eliminates the need for manual setup/teardown in every test file.
