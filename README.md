@@ -14,7 +14,7 @@ This directory contains E2E automated test samples built using Playwright. It hi
 ## 🏗️ Project Structure
 
 ```text
-gen-ai-automation/
+automation-tests/
 ├── components/                            # Reusable UI widgets shared globally across pages
 │   ├── app-card.component.ts
 │   ├── breadcrumb.path.component.ts
@@ -40,92 +40,54 @@ gen-ai-automation/
 └── tests/                                 # Test implementations (*.spec.ts)
 ```
 
-## Technical Showcase
-This framework demonstrates specialized engineering solutions for non-deterministic Gen-AI environments:
-*   **AI-Powered Relevance Scoring:** Utilizes an "LLM-as-a-judge" pattern, employing a secondary AI model (e.g., Vertex AI/Gemini) to programmatically evaluate the quality and relevance of generated responses against defined thresholds.
-*   **Stateful Session Management:** Validates complex application states, ensuring deep-linked URLs accurately restore previous AI generation threads, conversation history, and multi-step feedback loops.
-*   **Robust Asynchronous Synchronization:** Implements a custom `waitForGenAi` utility to manage non-deterministic Gen-AI model latency, leveraging ARIA progress roles and network-idle states for reliable test synchronization.
-*   **Cross-Context & Multi-Tab Orchestration:** Orchestrates complex user journeys across multiple browser contexts and tabs, verifying data persistence and asset forwarding between internal tools.
-*   **Browser-Native API Integration Testing:** Validates system-level interactions, including `navigator.clipboard` for shareable links and automated file-system checks for dynamic downloads.
-*   **Responsive & Accessibility Compliance:** Ensures comprehensive coverage for responsive design across various breakpoints (Desktop, Tablet, Mobile) and validates ARIA attributes for accessibility.
-*   **Dynamic Test Data Generation:** Leverages `Faker.js` for high-entropy input generation and dynamic binary file creation to robustly test image upload pipelines and error handling.
-*   **Scalable Architecture (POM & Playwright Fixtures):** Built on a scalable Page Object Model (POM) with a custom Playwright fixture system, ensuring high code reusability and clear separation of concerns.
+## 🔬 Technical Showcase
 
-## Page Object Model (POM) Architecture
+This framework demonstrates specialized engineering solutions for non-deterministic Gen-AI environments:
+* **AI-Powered Relevance Scoring:** Utilizes an "LLM-as-a-judge" pattern, employing a secondary AI model (e.g., Vertex AI/Gemini) to programmatically evaluate the quality and relevance of generated responses against defined thresholds.
+* **Stateful Session Management:** Validates complex application states, ensuring deep-linked URLs accurately restore previous AI generation threads, conversation history, and multi-step feedback loops.
+* **Robust Asynchronous Synchronization:** Implements a custom `waitForGenAi` utility to manage non-deterministic Gen-AI model latency, leveraging ARIA progress roles and network-idle states for reliable test synchronization.
+* **Cross-Context & Multi-Tab Orchestration:** Orchestrates complex user journeys across multiple browser contexts and tabs, verifying data persistence and asset forwarding between internal tools.
+* **Browser-Native API Integration Testing:** Validates system-level interactions, including `navigator.clipboard` for shareable links and automated file-system checks for dynamic downloads.
+* **Responsive & Accessibility Compliance:** Ensures comprehensive coverage for responsive design across various breakpoints (Desktop, Tablet, Mobile) and validates ARIA attributes for accessibility.
+* **Dynamic Test Data Generation:** Leverages `Faker.js` for high-entropy input generation and dynamic binary file creation to robustly test image upload pipelines and error handling.
+* **Scalable Architecture (POM & Playwright Fixtures):** Built on a scalable Page Object Model (POM) with a custom Playwright fixture system, ensuring high code reusability and clear separation of concerns.
+
+## 📐 Page Object Model (POM) Architecture
 
 This project leverages the **Page Object Model (POM)** design pattern to create a robust and maintainable automation suite. By abstracting the application's UI into distinct classes, we ensure that test scripts remain resilient to UI changes.
 
 ### Core Principles:
-*   **Encapsulation:** All element locators and page-specific actions are contained within Page Object classes.
-*   **Component-Based Design:** Shared UI elements like the `SideNavigationComponent` and `OnboardingModalComponent` are built as reusable components that can be integrated into multiple Page Objects.
-*   **Fixture Integration:** We utilize Playwright's dependency injection (fixtures) to manage Page Object lifetimes. This eliminates the need for manual setup/teardown in every test file.
+* **Encapsulation:** All element locators and page-specific actions are contained within Page Object classes.
+* **Component-Based Design:** Shared UI elements like the `SideNavigationComponent` and `OnboardingModalComponent` are built as reusable components that can be integrated into multiple Page Objects.
+* **Fixture Integration:** We utilize Playwright's dependency injection (fixtures) to manage Page Object lifetimes. This eliminates the need for manual setup/teardown in every test file.
 
-### Usage Example:
+## 💡 Usage Example
+
 ```typescript
 import { test } from '@fixtures/pages/page-objects.fixture';
 
-test('should interact with the page', async ({ selfservePage }) => {
+test('should evaluate LLM response quality', async ({ selfservePage, aiJudge }) => {
   await selfservePage.goto();
-  await selfservePage.chatInputFormSection.promptInput.fill('Hello AI');
+  await selfservePage.chatInputFormSection.promptInput.fill('Explain quantum computing');
+  
+  // Custom sync for non-deterministic latency
+  await selfservePage.waitForGenAiCompletion(); 
+  
+  // LLM-as-a-judge validation pattern
+  const responseText = await selfservePage.resultsSection.getGeneratedText();
+  await aiJudge.assertRelevanceScore(responseText, { threshold: 0.85 });
 });
 ```
 
-### Requirements
+## 🧭 Codebase Navigation Guide
 
-Before running the tests, ensure the following steps are completed:
+Because this is a non-runnable snapshot, please refer to the following directories to review the core architectural implementations:
 
-1. Clone the repository to your local machine.
+* **The LLM-as-a-judge implementation:** Review the custom assertions inside `/tests/helpers` or the specific evaluation logic in `tests/`.
+* **Stateful Session Management:** Check `pages/gen-ai/` to see how complex context logic is retained across navigation.
+* **Custom Synchronization:** Review the base page classes (`base.page.ts`) to see the custom `waitForGenAi` DOM monitoring utilities.
+* **Fixture Injections:** Look at how dependency injection is handled across the framework to keep tests perfectly isolated.
 
-2. Change your directory to the `automation-tests` folder where the test scripts and configuration files are located.
+## 👨‍💻 Authors
 
-- `cd path/to/automation-tests`
-
-3. Install the required modules by executing the following command in your terminal:
-
-- `npm install`
-
-4. Install Playwright browsers:
-
-- `npx playwright install`
-
-5. Refer to the `.env.example` file to create and populate a `.env` file with the necessary variables.
-
-### Running the tests
-
-When you are ready to run the tests:
-
-1. Refer to the `package.json` file to view and choose a test script. For example, use the following script to run all tests:
-
-- `npm run e2e:regression-dev-all` for headless execution or
-- `npm run e2e:regression-dev-ui-tests` for UI console
-
-2. After the tests are executed, the `allure-results` folder will be populated with report files. To generate an HTML report, run the following command in your terminal:
-
-- `allure generate --single-file allure-results`
-
-Open the `allure-report/index.html` file in a web browser to view the test report.
-
-### Running the tests in Github Actions
-
-When you are ready to run the tests:
-
-1. Refer to `./.github` from project root folder to view the workflow. The following file locations were updated to handle the end-to-end tests:
-
-- `actions/playwright/actions.yml` Runs playwright tests 
-- `workflows/check.yaml` for the workflow that triggers the e2e tests
-- `workflows/primary.yaml` add the check workflow (including e2e) to the primary workflow
-
-
-2. After the tests are executed, the `allure-results` folder will be populated with report files. To generate an HTML report, run the following command in your terminal:
-
-- `allure generate --single-file allure-results`
-
-Open the `allure-report/index.html` file in a web browser to view the test report.
-
-### Authors
-
-- Rod Dizon [dznr0013@humbermail.ca]
-
-
-
-Happy testing! 🚀# demo-project-only
+* **Rod Dizon** - [dznr0013@humbermail.ca]
