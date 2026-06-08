@@ -1,0 +1,20 @@
+{
+  "name": "automation-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "e2e:regression-dev-all": "npx playwright test --config configs/gen-ai-playwright.config.ts",
+    "e2e:regression-dev-ui-tests": "npx playwright test --config configs/gen-ai-playwright.config.ts --ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "@faker-js/faker": "^9.2.0",
+    "@types/node": "^20",
+    "allure-commandline": "^2.29.0",
+    "allure-playwright": "^2.15.1",
+    "@playwright/test": "1.51.0"
+  }
+}

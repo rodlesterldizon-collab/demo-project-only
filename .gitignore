@@ -1,0 +1,18 @@
+# Generated Reports and videos
+/playwright-report/*
+test-results/*
+allure-report/*
+allure-results/*
+
+# env file
+.env
+
+storageState.json
+node_modules/
+/blob-report/
+/playwright/.cache/
+allure-results/
+
+# Screenshots and Snapshots
+**/screenshots/
+**/test-snapshots/
