@@ -5,7 +5,9 @@
 ![Playwright](https://img.shields.io/badge/playwright-%232EAD33.svg?style=flat-square&logo=playwright&logoColor=white)
 ![CI Status](https://img.shields.io/badge/CI_Status-DEMO-orange?style=flat-square)
 
-> **Note:** This repository serves as a **historical code exhibit** from **July 2025**, representing the initial phase of the automation journey. It is a data-cleansed, partial snapshot and **will not run**. All environment-specific connections (Staging/Dev), API tests, and proprietary integration modules have been removed or neutralized for demonstration purposes.
+Project Status: This repository is an architectural exhibit showcasing the automation framework developed in July 2025. It serves as a static reference for my implementation of the Page Object Model (POM), Playwright fixture patterns, and custom synchronization utilities for Gen-AI testing.
+
+Note: To maintain security and confidentiality, all proprietary integration modules, firewall-gated environment connections, and API keys have been neutralized or removed. As such, this snapshot is intended for structural review and is not an executable test suite.
 
 ## 🛠️ Framework Overview
 
