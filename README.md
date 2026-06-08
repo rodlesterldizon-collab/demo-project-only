@@ -22,6 +22,25 @@ This framework demonstrates specialized engineering solutions for non-determinis
 *   **Dynamic Test Data Generation:** Leverages `Faker.js` for high-entropy input generation and dynamic binary file creation to robustly test image upload pipelines and error handling.
 *   **Scalable Architecture (POM & Playwright Fixtures):** Built on a scalable Page Object Model (POM) with a custom Playwright fixture system, ensuring high code reusability and clear separation of concerns.
 
+## Page Object Model (POM) Architecture
+
+This project leverages the **Page Object Model (POM)** design pattern to create a robust and maintainable automation suite. By abstracting the application's UI into distinct classes, we ensure that test scripts remain resilient to UI changes.
+
+### Core Principles:
+*   **Encapsulation:** All element locators and page-specific actions are contained within Page Object classes.
+*   **Component-Based Design:** Shared UI elements like the `SideNavigationComponent` and `OnboardingModalComponent` are built as reusable components that can be integrated into multiple Page Objects.
+*   **Fixture Integration:** We utilize Playwright's dependency injection (fixtures) to manage Page Object lifetimes. This eliminates the need for manual setup/teardown in every test file.
+
+### Usage Example:
+```typescript
+import { test } from '@fixtures/pages/page-objects.fixture';
+
+test('should interact with the page', async ({ selfservePage }) => {
+  await selfservePage.goto();
+  await selfservePage.chatInputFormSection.promptInput.fill('Hello AI');
+});
+```
+
 ### Requirements
 
 Before running the tests, ensure the following steps are completed:
