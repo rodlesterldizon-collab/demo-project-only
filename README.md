@@ -1,4 +1,4 @@
-### Generative AI Automation Framework ###
+# 🤖 Generative AI Automation Framework
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=flat-square&logo=node.js&logoColor=white)
@@ -7,9 +7,38 @@
 
 > **Note:** This repository serves as a **historical code exhibit** from **July 2025**, representing the initial phase of the automation journey. It is a data-cleansed, partial snapshot and **will not run**. All environment-specific connections (Staging/Dev), API tests, and proprietary integration modules have been removed or neutralized for demonstration purposes.
 
-### Framework Overview
+## 🛠️ Framework Overview
 
-This directory contains E2E automated test samples built using Playwright. It highlights the architectural patterns and complex validation logic implemented during the project's inception.
+This directory contains E2E automated test samples built using Playwright. It highlights the hierarchical Page Object Model (POM) pattern and complex validation logic implemented in the framework.
+
+## 🏗️ Project Structure
+
+```text
+gen-ai-automation/
+├── components/                            # Reusable UI widgets shared globally across pages
+│   ├── app-card.component.ts
+│   ├── breadcrumb.path.component.ts
+│   ├── combobox.component.ts
+│   ├── copy-section.component.ts
+│   ├── copy-shareable-link.component.ts
+│   └── ... (remaining core widgets)
+├── pages/                                 # Orchestration layers and global route containers
+│   └── gen-ai/                            # Domain-specific grouping for Generative AI views
+│       ├── base.page.ts                   # Base page class with common methods/contexts
+│       ├── concept-innovation.page.ts
+│       ├── cultural-compass-monitoring.page.ts
+│       ├── cultural-compass-page.ts
+│       ├── disclaimer.page.ts
+│       └── ... (remaining top-level pages)
+├── sections/                              # Fragmented form layouts and localized sub-regions
+│   ├── app-cards.section.ts
+│   ├── concept-innovation-generate-form.section.ts
+│   ├── concept-innovation-result-and-update.section.ts
+│   ├── cultural-compass-results.section.ts
+│   ├── cultural-compass-send-for-review.section.ts
+│   └── ... (remaining compound UI sections)
+└── tests/                                 # Test implementations (*.spec.ts)
+```
 
 ## Technical Showcase
 This framework demonstrates specialized engineering solutions for non-deterministic Gen-AI environments:
