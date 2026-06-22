@@ -66,26 +66,49 @@ This project leverages the **Page Object Model (POM)** design pattern to create 
 ## 💡 Usage Example
 
 ```typescript
-import { test } from '@fixtures/pages/page-objects.fixture';
+test('[GEN-T80] Should Return Relevant Response To Prompt, Based On AI Relevance Evaluation', async ({
+    selfservePage,
+  }) => {
+    // Given a user has entered a prompt in the chat input
+    const kickOffIndex = 0;
+    await selfservePage.chatOutputDisplaySection.kickoffButtons.nth(kickOffIndex).click();
+    const promptText = await selfservePage.chatInputFormSection.promptInput.textContent();
+    if (promptText === null) {
+      throw new Error('Initial prompt text was null.');
+    }
+    // When the user submits the prompt
+    await selfservePage.chatInputFormSection.submitPrompt.click();
+    await selfservePage.chatInputFormSection.submitPrompt.isEnabled({ timeout: 30000 });
+    await selfservePage.chatOutputDisplaySection.loadingAnimation.waitFor({ state: 'hidden' });
+    const aiGeneratedResponse = await selfservePage.chatOutputDisplaySection.promptResponse.textContent();
+    if (aiGeneratedResponse === null) {
+      throw new Error('AI-generated response text was null.');
+    }
+    // Then a relevance score is calculated by comparing the prompt and response using AI
+    const relevanceEvaluationPrompt = ` Given you are a third-party QA context validator.
 
-test('should evaluate LLM response quality', async ({ selfservePage, aiJudge }) => {
-  await selfservePage.goto();
-  await selfservePage.chatInputFormSection.promptInput.fill('Explain quantum computing');
-  
-  // Custom sync for non-deterministic latency
-  await selfservePage.waitForGenAiCompletion(); 
-  
-  // LLM-as-a-judge validation pattern
-  const responseText = await selfservePage.resultsSection.getGeneratedText();
-  await aiJudge.assertRelevanceScore(responseText, { threshold: 0.85 });
-});
+      Consider the following prompt:  ${promptText} 
+      And the following generated response: ${aiGeneratedResponse} 
+      ${selfServePromptData['evaluateTextResponseRelevance'].prompt}`;
+    const { text: relevanceScoreText } = await textChat({ prompt: relevanceEvaluationPrompt });
+    const trimmedScoreText = relevanceScoreText.trim();
+    const relevanceScore = parseFloat(trimmedScoreText);
+    // AND the relevance score is above 70, indicating sufficient relevance
+    if (relevanceScore > 70) {
+      await expect(selfservePage.chatOutputDisplaySection.promptResponse).toBeVisible();
+      expect(relevanceScore).toBeGreaterThan(70);
+    } else {
+      console.warn(`Warning: Non-critical condition did not pass.  Score was: ${relevanceScore}`);
+      console.warn(`> ${promptText}\n> ${aiGeneratedResponse}`);
+    }
+  });
 ```
 
 ## 🧭 Codebase Navigation Guide
 
-Because this is a non-runnable snapshot, please refer to the following directories to review the core architectural implementations:
+Because this is a non-runnable snapshot, please refer to the following files and directories to review the core architectural implementations:
 
-* **The LLM-as-a-judge implementation:** Review the custom assertions inside `/tests/helpers` or the specific evaluation logic in `tests/`.
+* **The LLM-as-a-judge implementation:** Review the relevance evaluation logic in [self-serve.spec.ts](file:///Users/vimay/Downloads/automation-tests%202/tests/self-serve.spec.ts).
 * **Stateful Session Management:** Check `pages/gen-ai/` to see how complex context logic is retained across navigation.
 * **Custom Synchronization:** Review the base page classes (`base.page.ts`) to see the custom `waitForGenAi` DOM monitoring utilities.
 * **Fixture Injections:** Look at how dependency injection is handled across the framework to keep tests perfectly isolated.
