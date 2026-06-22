@@ -1,69 +1,50 @@
-# 🤖 Generative AI Automation Framework
+# 🤖 Generative AI Automation Framework (Early-Stage Snapshot)
 
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat-square&logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/node.js-6DA55F?style=flat-square&logo=node.js&logoColor=white)
 ![Playwright](https://img.shields.io/badge/playwright-%232EAD33.svg?style=flat-square&logo=playwright&logoColor=white)
-![CI Status](https://img.shields.io/badge/CI_Status-DEMO-orange?style=flat-square)
 
-Project Status: This repository is an architectural exhibit showcasing the automation framework developed in July 2025. It serves as a static reference for my implementation of the Page Object Model (POM), Playwright fixture patterns, and custom synchronization utilities for Gen-AI testing.
+**Project Status:** This repository contains a snapshot of an automation framework I developed during its early stages in July 2025. It serves as a practical demonstration of my approach to test automation using Playwright. 
 
-Note: To maintain security and confidentiality, all proprietary integration modules, firewall-gated environment connections, and API keys have been neutralized or removed. As such, this snapshot is intended for structural review and is not an executable test suite.
+*Note: To protect proprietary information, API keys, and internal environments, the core framework execution logic and credentials have been removed. What remains is a subset of the source code—specifically the test specifications (`.spec.ts` files)—provided to showcase my coding style, test design, and problem-solving approach.*
 
 ## 🛠️ Framework Overview
 
-This directory contains E2E automated test samples built using Playwright. It highlights the hierarchical Page Object Model (POM) pattern and complex validation logic implemented in the framework.
+These test samples demonstrate how I tackle complex E2E scenarios, particularly for applications interacting with Generative AI. The tests are built on the Page Object Model (POM) pattern and utilize Playwright fixtures for test isolation.
 
-## 🏗️ Project Structure
+## 🏗️ Project Structure (POM Architecture)
+
+Even though the core implementations have been removed, the architecture of the framework follows a strict component-based Page Object Model to ensure high reusability and scalability:
 
 ```text
 automation-tests/
 ├── components/                            # Reusable UI widgets shared globally across pages
 │   ├── app-card.component.ts
-│   ├── breadcrumb.path.component.ts
-│   ├── combobox.component.ts
-│   ├── copy-section.component.ts
-│   ├── copy-shareable-link.component.ts
-│   └── ... (remaining core widgets)
+│   └── copy-shareable-link.component.ts
 ├── pages/                                 # Orchestration layers and global route containers
 │   └── gen-ai/                            # Domain-specific grouping for Generative AI views
 │       ├── base.page.ts                   # Base page class with common methods/contexts
-│       ├── concept-innovation.page.ts
-│       ├── cultural-compass-monitoring.page.ts
-│       ├── cultural-compass-page.ts
-│       ├── disclaimer.page.ts
-│       └── ... (remaining top-level pages)
+│       └── concept-innovation.page.ts
 ├── sections/                              # Fragmented form layouts and localized sub-regions
-│   ├── app-cards.section.ts
 │   ├── concept-innovation-generate-form.section.ts
-│   ├── concept-innovation-result-and-update.section.ts
-│   ├── cultural-compass-results.section.ts
-│   ├── cultural-compass-send-for-review.section.ts
-│   └── ... (remaining compound UI sections)
+│   └── cultural-compass-results.section.ts
 └── tests/                                 # Test implementations (*.spec.ts)
 ```
 
-## 🔬 Technical Showcase
+## 🔬 Technical Highlights & Testing Approaches
 
-This framework demonstrates specialized engineering solutions for non-deterministic Gen-AI environments:
-* **AI-Powered Relevance Scoring:** Utilizes an "LLM-as-a-judge" pattern, employing a secondary AI model (e.g., Vertex AI/Gemini) to programmatically evaluate the quality and relevance of generated responses against defined thresholds. (e.g., `GEN-T80`)
-* **Stateful Session Management:** Validates complex application states, ensuring deep-linked URLs accurately restore previous AI generation threads, conversation history, and multi-step feedback loops. (e.g., `GEN-T127`, `GEN-T130`)
-* **Robust Asynchronous Synchronization:** Implements a custom `waitForGenAi` utility to manage non-deterministic Gen-AI model latency, leveraging ARIA progress roles and network-idle states for reliable test synchronization. (e.g., `GEN-T367`)
-* **Cross-Context & Multi-Tab Orchestration:** Orchestrates complex user journeys across multiple browser contexts and tabs, verifying data persistence and asset forwarding between internal tools. (e.g., `GEN-T138`, `GEN-T412`)
-* **Browser-Native API Integration Testing:** Validates system-level interactions, including `navigator.clipboard` for shareable links and automated file-system checks for dynamic downloads. (e.g., `GEN-T386`, `GEN-T100`)
-* **Responsive & Accessibility Compliance:** Validates system behavior across defined viewports and ensures accessibility standards by verifying ARIA attributes and roles. (e.g., `GEN-T151`, `GEN-T192`)
-* **Dynamic Test Data Generation:** Leverages `Faker.js` for high-entropy input generation and dynamic binary file creation to robustly test image upload pipelines and error handling. (e.g., `GEN-T82`, `GEN-T283`)
-* **Scalable Architecture (POM & Playwright Fixtures):** Built on a scalable Page Object Model (POM) with a custom Playwright fixture system, ensuring high code reusability and clear separation of concerns.
+This subset of tests highlights several practical automation scenarios and how I handled them:
 
-## 📐 Page Object Model (POM) Architecture
+* **Cross-Tab & Multi-Context Testing:** Simulating user journeys that span across multiple browser tabs to verify that data correctly persists and passes between different parts of the application. (See `GEN-T138` in [concept-innovation.spec.ts](./tests/concept-innovation.spec.ts))
+* **Testing Browser Native APIs:** Validating clipboard interactions (`navigator.clipboard`) to ensure shareable links and generated text copy correctly. (See `GEN-T386` in [concept-innovation.spec.ts](./tests/concept-innovation.spec.ts))
+* **File System Operations:** Testing dynamic file uploads with randomized binary files (via `Faker.js`), and intercepting browser downloads to validate file types and dynamically generated filenames. (See `GEN-T25` in [localization.spec.ts](./tests/localization.spec.ts))
+* **Session Manipulation:** Injecting JWTs directly into browser cookies to bypass mandatory user onboarding flows, allowing for faster and more isolated test execution. (See `GEN-T370` in [cultural-compass.spec.ts](./tests/cultural-compass.spec.ts))
+* **Deep Linking & Browser History:** Using Playwright's `goBack()` and `goForward()` to verify that the application correctly caches and restores state, and testing that sessions rebuild properly from shared URLs. (See `GEN-T151` & `GEN-T130`)
+* **Handling AI Latency:** Implementing custom synchronization methods (`waitForGenAi`) to handle the unpredictable load times typical of LLM applications, rather than relying on hardcoded timeouts.
 
-This project leverages the **Page Object Model (POM)** design pattern to create a robust and maintainable automation suite. By abstracting the application's UI into distinct classes, we ensure that test scripts remain resilient to UI changes.
+## 💡 Usage Example: LLM-as-a-Judge
 
-### Core Principles: (e.g., `GEN-T189`, `GEN-T124`)
-* **Encapsulation:** All element locators and page-specific actions are contained within Page Object classes.
-* **Component-Based Design:** Shared UI elements like the `SideNavigationComponent` and `OnboardingModalComponent` are built as reusable components that can be integrated into multiple Page Objects.
-* **Fixture Integration:** We utilize Playwright's dependency injection (fixtures) to manage Page Object lifetimes. This eliminates the need for manual setup/teardown in every test file.
-
-## 💡 Usage Example
+One of the unique challenges in this project was testing non-deterministic AI outputs. The test below demonstrates an "LLM-as-a-judge" pattern, where we use an AI to evaluate the relevance of the application's generated response against a specific threshold:
 
 ```typescript
 test('[GEN-T80] Should Return Relevant Response To Prompt, Based On AI Relevance Evaluation', async ({
@@ -106,12 +87,12 @@ test('[GEN-T80] Should Return Relevant Response To Prompt, Based On AI Relevance
 
 ## 🧭 Codebase Navigation Guide
 
-Because this is a non-runnable snapshot, please refer to the following files and directories to review the core architectural implementations:
+Since the core framework execution code has been stripped out, reviewers should focus on the `/tests` directory to review my test design and implementations:
 
-* **The LLM-as-a-judge implementation:** Review the relevance evaluation logic in [self-serve.spec.ts](file:///Users/vimay/Downloads/automation-tests%202/tests/self-serve.spec.ts).
-* **Stateful Session Management:** Check `pages/gen-ai/` to see how complex context logic is retained across navigation.
-* **Custom Synchronization:** Review the base page classes (`base.page.ts`) to see the custom `waitForGenAi` DOM monitoring utilities.
-* **Fixture Injections:** Look at how dependency injection is handled across the framework to keep tests perfectly isolated.
+* **Session & Cookie Manipulation:** [cultural-compass.spec.ts](./tests/cultural-compass.spec.ts)
+* **Multi-Tab Orchestration & Clipboards:** [concept-innovation.spec.ts](./tests/concept-innovation.spec.ts)
+* **File I/O and Downloads:** [localization.spec.ts](./tests/localization.spec.ts)
+* **The LLM-as-a-judge implementation:** [self-serve.spec.ts](./tests/self-serve.spec.ts)
 
 ## 👨‍💻 Authors
 
